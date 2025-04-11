@@ -1,5 +1,6 @@
 #!/bin/bash
 #Sachin Ninganure
+
 LOCAL_RPM_NM="/home/sninganu/rhel_verification/core/NetworkManager-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
 LOCAL_RPM_CS="/home/sninganu/rhel_verification/core/NetworkManager-cloud-setup-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
 LOCAL_RPM_OVS="/home/sninganu/rhel_verification/core/NetworkManager-ovs-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
@@ -9,12 +10,12 @@ LOCAL_RPM_LIB="/home/sninganu/rhel_verification/core/NetworkManager-libnm-1.52.0
 
 TARGET_DIR="/host/home/core"
 
-REPLACE_NM="NetworkManager.x86_64"
-REPLACE_CS="NetworkManager-cloud-setup.x86_64"
-REPLACE_OVS="NetworkManager-ovs.x86_64"
-REPLACE_TM="NetworkManager-team.x86_64"
-REPLACE_TUI="NetworkManager-tui.x86_64"
-REPLACE_LIB="NetworkManager-libnm.x86_64"
+REPLACE_NM="/home/core/NetworkManager-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
+REPLACE_CS="/home/core/NetworkManager-cloud-setup-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
+REPLACE_OVS="/home/core/NetworkManager-ovs-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
+REPLACE_TM="/home/core/NetworkManager-team-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
+REPLACE_TUI="/home/core/NetworkManager-tui-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
+REPLACE_LIB="/home/core/NetworkManager-libnm-1.52.0-1.rhel84142.el9_6.x86_64.rpm"
 
 for NODE in $(oc get nodes -o jsonpath='{.items[*].metadata.name}'); do
   echo "Processing node: $NODE"
@@ -72,7 +73,7 @@ echo "Copying Network Library RPM"
 
 echo "replace Network Manager library"
  if ! oc exec "${DEBUG_POD_NAME}" -- chroot /host /bin/sh -c \
-    "rpm-ostree override replace ${REPLACE_NM} --install=/home/core/$(basename ${LOCAL_RPM_NM})"; then
+    "rpm-ostree override replace ${REPLACE_NM}"; then
     echo "Error: Package operation failed on node ${NODE}"
     oc delete pod "${DEBUG_POD_NAME}" --force --grace-period=0 >/dev/null 2>&1
     continue
@@ -80,7 +81,7 @@ echo "replace Network Manager library"
 
 echo "replace cloud setup library"
  if ! oc exec "${DEBUG_POD_NAME}" -- chroot /host /bin/sh -c \
-    "rpm-ostree override replace ${REPLACE_CS} --install=/home/core/$(basename ${LOCAL_RPM_CS})"; then
+    "rpm-ostree override replace ${REPLACE_CS}"; then
     echo "Error: Package operation failed on node ${NODE}"
     oc delete pod "${DEBUG_POD_NAME}" --force --grace-period=0 >/dev/null 2>&1
     continue
@@ -88,7 +89,7 @@ echo "replace cloud setup library"
 
 echo "replace OVS library"
  if ! oc exec "${DEBUG_POD_NAME}" -- chroot /host /bin/sh -c \
-    "rpm-ostree override replace ${REPLACE_OVS} --install=/home/core/$(basename ${LOCAL_RPM_OVS})"; then
+    "rpm-ostree override replace ${REPLACE_OVS}"; then
     echo "Error: Package operation failed on node ${NODE}"
     oc delete pod "${DEBUG_POD_NAME}" --force --grace-period=0 >/dev/null 2>&1
     continue
@@ -96,7 +97,7 @@ echo "replace OVS library"
 
 echo "replace TM library"
  if ! oc exec "${DEBUG_POD_NAME}" -- chroot /host /bin/sh -c \
-    "rpm-ostree override replace ${REPLACE_TM} --install=/home/core/$(basename ${LOCAL_RPM_TM})"; then
+    "rpm-ostree override replace ${REPLACE_TM}"; then
     echo "Error: Package operation failed on node ${NODE}"
     oc delete pod "${DEBUG_POD_NAME}" --force --grace-period=0 >/dev/null 2>&1
     continue
@@ -104,7 +105,7 @@ echo "replace TM library"
  
 echo "replace TUI library"
  if ! oc exec "${DEBUG_POD_NAME}" -- chroot /host /bin/sh -c \
-    "rpm-ostree override replace ${REPLACE_TUI} --install=/home/core/$(basename ${LOCAL_RPM_TUI})"; then
+    "rpm-ostree override replace ${REPLACE_TUI}"; then
     echo "Error: Package operation failed on node ${NODE}"
     oc delete pod "${DEBUG_POD_NAME}" --force --grace-period=0 >/dev/null 2>&1
     continue
@@ -112,7 +113,7 @@ echo "replace TUI library"
  
 echo "replace Network libnm library"
  if ! oc exec "${DEBUG_POD_NAME}" -- chroot /host /bin/sh -c \
-    "rpm-ostree override replace ${REPLACE_LIB} --install=/home/core/$(basename ${LOCAL_RPM_LIB})"; then
+    "rpm-ostree override replace ${REPLACE_LIB}"; then
     echo "Error: Package operation failed on node ${NODE}"
     oc delete pod "${DEBUG_POD_NAME}" --force --grace-period=0 >/dev/null 2>&1
     continue
